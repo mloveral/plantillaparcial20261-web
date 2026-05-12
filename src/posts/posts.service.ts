@@ -48,9 +48,7 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException('Post not found');
     }
-    console.log(dto);
     const comment = this.commentsRepository.create({ ...dto, post });
-    console.log('Creating comment:', comment);
     return this.commentsRepository.save(comment);
   }
 }
