@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PostsService } from 'src/posts/posts.service';
+import { ApiKeyGuard } from 'src/auth/api-key.guard';
+import { CreatePostDto } from 'src/posts/dto/create-post.dto';
 
+@UseGuards(ApiKeyGuard)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -23,7 +25,12 @@ export class UsersController {
   }
 
   @Get(':id/posts')
-  findUserPosts(@Param('id') id: string) {
-    return this.postsService
+  findUserPosts(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.findAll(id);
+  }
+
+  @Post(':id/posts')
+  createPost(@Param('id', ParseIntPipe) id: number, @Body() dto: CreatePostDto) {
+    return this.postsService.createPost(id, dto);
   }
 }
