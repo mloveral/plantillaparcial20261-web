@@ -23,7 +23,7 @@ export class PostsService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const post = this.postsRepository.create({...createPostDto, user});
+    const post = this.postsRepository.create({ ...createPostDto, user });
 
     post.user = user;
     return this.postsRepository.save(post);
@@ -48,7 +48,9 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException('Post not found');
     }
+    console.log(dto);
     const comment = this.commentsRepository.create({ ...dto, post });
+    console.log('Creating comment:', comment);
     return this.commentsRepository.save(comment);
   }
 }

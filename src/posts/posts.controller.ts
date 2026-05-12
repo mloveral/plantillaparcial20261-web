@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller,Post } from '@nestjs/common';
+import { Body, Controller,Param,ParseIntPipe,Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
@@ -8,7 +8,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post(':id/comments')
-  createComment(postId: number, dto: CreateCommentDto) {
+  createComment(@Param('id', ParseIntPipe)postId: number, @Body() dto: CreateCommentDto) {
     return this.postsService.createComment(postId, dto);
   }
 }
